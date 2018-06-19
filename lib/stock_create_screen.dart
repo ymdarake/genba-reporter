@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 
 class StockCreateScreen extends StatelessWidget {
@@ -8,6 +11,8 @@ class StockCreateScreen extends StatelessWidget {
   }
 }
 
+
+//TODO: Widgetを分離する
 class MyForm extends StatefulWidget {
   @override
   _MyFormState createState() => new _MyFormState();
@@ -16,22 +21,22 @@ class MyForm extends StatefulWidget {
 class _MyFormState extends State<MyForm> {
   final myController = new TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    myController.addListener(_save);
-  }
+//  @override
+//  void initState() {
+//    myController.addListenerするならここ
+//    super.initState();
+//  }
 
   @override
   void dispose() {
-    myController.removeListener(_save);
     myController.dispose();
     super.dispose();
   }
 
   _save() {
     print("Second text field: ${myController.text}");
-
+    print("now saving...");
+    write();
   }
 
   @override
@@ -43,7 +48,12 @@ class _MyFormState extends State<MyForm> {
           new IconButton(
               icon: new Icon(Icons.check, color: Colors.black,),
               onPressed: () {
-                print(myController.text);
+                _save();
+              }),
+          new IconButton(
+              icon: new Icon(Icons.book, color: Colors.black,),
+              onPressed: () {
+                read();
               })
         ],
       ),
@@ -60,4 +70,30 @@ class _MyFormState extends State<MyForm> {
       ),
     );
   }
+
+  //TODO: writerを分離する
+  //TODO: Stockオブジェクトをシリアライズ/デシリアライズしてwrite/read
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return new File('$path/stock.txt');
+  }
+  Future<File> write() async {
+    final file = await _localFile;
+    return file.writeAsString(myController.text, mode: FileMode.append);
+  }
+  Future<String> read() async {
+    try {
+      final file = await _localFile;
+      String contents = await file.readAsString();
+      print(contents);
+      return contents;
+    } catch (e) {
+      return "nothing!!!";
+    }
+  }
+
 }
