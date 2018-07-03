@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 
-
 class StockCreateScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -18,16 +17,15 @@ class Stock {
 
   Stock(this.title, this.member);
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'title': title,
         'member': member,
       };
+
   Stock.fromJson(Map<String, dynamic> json)
       : title = json['title'],
         member = json['member'];
 }
-
 
 //TODO: Widgetを分離する
 class MyForm extends StatefulWidget {
@@ -37,7 +35,7 @@ class MyForm extends StatefulWidget {
 
 class _MyFormState extends State<MyForm> {
   final titleController = TextEditingController();
-  final memberController = TextEditingController();//TODO: objectにする
+  final memberController = TextEditingController(); //TODO: objectにする
 
 //  @override
 //  void initState() {
@@ -63,12 +61,18 @@ class _MyFormState extends State<MyForm> {
         title: new Text('Create stock!'),
         actions: <Widget>[
           new IconButton(
-              icon: new Icon(Icons.check, color: Colors.black,),
+              icon: new Icon(
+                Icons.check,
+                color: Colors.black,
+              ),
               onPressed: () {
                 _save();
               }),
           new IconButton(
-              icon: new Icon(Icons.book, color: Colors.black,),
+              icon: new Icon(
+                Icons.book,
+                color: Colors.black,
+              ),
               onPressed: () {
                 read();
               })
@@ -80,15 +84,11 @@ class _MyFormState extends State<MyForm> {
           children: <Widget>[
             new TextField(
               controller: titleController,
-              decoration: InputDecoration(
-                  hintText: 'タイトルを入力してください'
-              ),
+              decoration: InputDecoration(hintText: 'タイトルを入力してください'),
             ),
             new TextField(
               controller: memberController,
-              decoration: InputDecoration(
-                  hintText: 'メンバーを入力してください'
-              ),
+              decoration: InputDecoration(hintText: 'メンバーを入力してください'),
             ),
           ],
           //TODO: other fields
@@ -103,10 +103,12 @@ class _MyFormState extends State<MyForm> {
     final directory = await getApplicationDocumentsDirectory();
     return directory.path;
   }
+
   Future<File> get _localFile async {
     final path = await _localPath;
     return new File('$path/8rocke.txt');
   }
+
   Future<File> write() async {
     final file = await _localFile;
     return _localFile.then((f) {
@@ -122,23 +124,22 @@ class _MyFormState extends State<MyForm> {
           return (decoded as List).map((e) {
             return Stock.fromJson(e);
           }).toList();
-        })
-            .then((saved) {
+        }).then((saved) {
           saved.add(new Stock(titleController.text, memberController.text));
           file.writeAsString(json.encode(saved), mode: FileMode.write);
         });
       });
     });
   }
+
   Future<String> read() async {
     try {
       final file = await _localFile;
       String contents = await file.readAsString();
-      print('read: '+contents);
+      print('read: ' + contents);
       return contents;
     } catch (e) {
       return "nothing!!!";
     }
   }
-
 }
