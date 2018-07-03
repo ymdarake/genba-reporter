@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'dart:convert';
 
 
 class StockCreateScreen extends StatelessWidget {
@@ -9,6 +10,22 @@ class StockCreateScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MyForm();
   }
+}
+
+class Stock {
+  String title;
+  String member;
+
+  Stock(this.title, this.member);
+
+  Map<String, dynamic> toJson() =>
+      {
+        'title': title,
+        'member': member,
+      };
+  Stock.fromJson(Map<String, dynamic> json)
+      : title = json['title'],
+        member = json['member'];
 }
 
 
@@ -19,7 +36,8 @@ class MyForm extends StatefulWidget {
 }
 
 class _MyFormState extends State<MyForm> {
-  final myController = new TextEditingController();
+  final titleController = TextEditingController();
+  final memberController = TextEditingController();//TODO: objectにする
 
 //  @override
 //  void initState() {
@@ -29,13 +47,12 @@ class _MyFormState extends State<MyForm> {
 
   @override
   void dispose() {
-    myController.dispose();
+    titleController.dispose();
+    memberController.dispose();
     super.dispose();
   }
 
   _save() {
-    print("Second text field: ${myController.text}");
-    print("now saving...");
     write();
   }
 
@@ -62,7 +79,16 @@ class _MyFormState extends State<MyForm> {
         child: Column(
           children: <Widget>[
             new TextField(
-              controller: myController,
+              controller: titleController,
+              decoration: InputDecoration(
+                  hintText: 'タイトルを入力してください'
+              ),
+            ),
+            new TextField(
+              controller: memberController,
+              decoration: InputDecoration(
+                  hintText: 'メンバーを入力してください'
+              ),
             ),
           ],
           //TODO: other fields
@@ -79,17 +105,36 @@ class _MyFormState extends State<MyForm> {
   }
   Future<File> get _localFile async {
     final path = await _localPath;
-    return new File('$path/stock.txt');
+    return new File('$path/8rocke.txt');
   }
   Future<File> write() async {
     final file = await _localFile;
-    return file.writeAsString(myController.text, mode: FileMode.append);
+    return _localFile.then((f) {
+      f.exists().then((e) {
+        if (!e) {
+          f.create();
+        }
+        read().then((text) {
+          if (text == "") {
+            text = "[]";
+          }
+          var decoded = json.decode(text);
+          return (decoded as List).map((e) {
+            return Stock.fromJson(e);
+          }).toList();
+        })
+            .then((saved) {
+          saved.add(new Stock(titleController.text, memberController.text));
+          file.writeAsString(json.encode(saved), mode: FileMode.write);
+        });
+      });
+    });
   }
   Future<String> read() async {
     try {
       final file = await _localFile;
       String contents = await file.readAsString();
-      print(contents);
+      print('read: '+contents);
       return contents;
     } catch (e) {
       return "nothing!!!";
