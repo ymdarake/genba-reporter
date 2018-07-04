@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:io';
-import 'dart:convert';
-import '../model/stock.dart';
 import '../io/files.dart';
+import '../model/stock_dao.dart';
 
 class StockForm extends StatefulWidget {
   @override
@@ -13,6 +10,7 @@ class StockForm extends StatefulWidget {
 class StockFormState extends State<StockForm> {
   final titleController = TextEditingController();
   final memberController = TextEditingController(); //TODO: objectにする
+  final dao = StockDao();
 
 //  @override
 //  void initState() {
@@ -28,7 +26,7 @@ class StockFormState extends State<StockForm> {
   }
 
   _save() {
-    write();
+    dao.create(titleController.text, memberController.text);
   }
 
   @override
@@ -74,22 +72,6 @@ class StockFormState extends State<StockForm> {
     );
   }
 
-  Future<File> write() async {
-    var files = Files();
-    return files.createIfNot('8rocket.json').then((_) {
-      return files.read('8rocket.json');
-    }).then((text) {
-      if (text == "") {
-        text = "[]";
-      }
-      var decoded = json.decode(text);
-      return (decoded as List).map((e) {
-        return Stock.fromJson(e);
-      }).toList();
-    }).then((saved) {
-      saved.add(new Stock(titleController.text, memberController.text));
-      files.write('8rocket.json', json.encode(saved));
-    });
-  }
+
 
 }
