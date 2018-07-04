@@ -5,7 +5,6 @@ import '../model/stock.dart';
 import '../io/files.dart';
 
 class StockDao {
-
   Future<File> create(String title, String member) async {
     var files = Files();
     return files.createIfNot('8rocket.json').then((_) {
@@ -24,4 +23,11 @@ class StockDao {
     });
   }
 
+  Future<List<Stock>> all() async {
+    return Files().read('8rocket.json').then((text) {
+      return (json.decode(text) as List).map((e) {
+        return Stock.fromJson(e);
+      }).toList();
+    });
+  }
 }
