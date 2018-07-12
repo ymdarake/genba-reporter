@@ -10,11 +10,15 @@ class StockListScreen extends StatefulWidget {
 class StockListState extends State<StockListScreen> {
   final dao = StockDao();
   List<Stock> stocks = [];
+  var initialized = false;
 
   @override
   Widget build(BuildContext context) {
     dao.all().then((res) {
-      handleFetched(res);
+      if (!initialized) {
+        initialized = true;
+        handleFetched(res);
+      }
     });
     return new Scaffold(
         appBar: new AppBar(
