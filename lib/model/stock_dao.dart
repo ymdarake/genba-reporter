@@ -7,19 +7,10 @@ import '../util/hasher.dart';
 
 class StockDao {
 
-  //TODO: allで書き直す
   Future<File> create(String title, String member, [String detail = '']) async {
     var files = Files();
-    return files.createIfNot('8rocket.json').then((_) {
-      return files.read('8rocket.json');
-    }).then((text) {
-      if (text == "") {
-        text = "[]";
-      }
-      var decoded = json.decode(text);
-      return (decoded as List).map((e) {
-        return Stock.fromJson(e);
-      }).toList();
+    return files.createIfNot('8rocket.json').then((_){
+      return all();
     }).then((saved) {
       saved.add(new Stock(Hasher().md5(title + member), title, member, detail));
       var ids = [];
@@ -37,16 +28,8 @@ class StockDao {
   //TODO: Stockごと引き回したい(気もする)
   Future<File> update(String id, String title, String member, String detail) async {
     var files = Files();
-    return files.createIfNot('8rocket.json').then((_) {
-      return files.read('8rocket.json');
-    }).then((text) {
-      if (text == "") {
-        text = "[]";
-      }
-      var decoded = json.decode(text);
-      return (decoded as List).map((e) {
-        return Stock.fromJson(e);
-      }).toList();
+    return files.createIfNot('8rocket.json').then((_){
+      return all();
     }).then((saved) {
       saved = saved.map((s){
         if (s.id != id) return s;
