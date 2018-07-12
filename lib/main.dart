@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'stock_list_screen.dart';
 import 'stock_create_screen.dart';
+import 'stock_detail_screen.dart';
 
 void main() => runApp(new MyApp());
 

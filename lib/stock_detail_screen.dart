@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'model/stock.dart';
+import 'component/stock_form.dart';
 
+class StockDetailScreen extends StatefulWidget {
 
-class StockDetailScreen extends StatelessWidget {
+  Stock stock;
+  StockDetailScreen(this.stock);
+
   @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("home screen"),
-      ),
-      body: new Padding(
-        padding: new EdgeInsets.all(16.0),
-        child: new Text('home'),
-      ),
-    );
-  }
+  State<StatefulWidget> createState() => new StockDetailScreenState(this.stock);
+}
+
+class StockDetailScreenState extends State<StockDetailScreen> {
+
+  Stock stock;
+  StockDetailScreenState(this.stock);
+
+  @override
+  Widget build(BuildContext context) => new StockForm(this.stock);
 }

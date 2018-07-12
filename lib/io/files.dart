@@ -23,6 +23,11 @@ class Files {
     });
   }
 
+  Future<File> overwrite(filename, text) async {
+    File file = await getLocalFile(filename);
+    return file.writeAsString(text);
+  }
+
   Future<String> read(filename) async {
     try {
       File file = await getLocalFile(filename);

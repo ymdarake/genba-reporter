@@ -5,7 +5,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("home screen"),
+        title: new Text("ホーム"),
       ),
       body: new Padding(
         padding: new EdgeInsets.all(16.0),
@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, "/stock_list");
             },
-            child: new Text('to stock list!')),
+            child: new Text('一覧へ')),
       ),
     );
   }
