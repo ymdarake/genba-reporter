@@ -41,7 +41,7 @@ class StockFormState extends State<StockForm> {
     if (this.stock.id.length > 0) {
       dao.update(this.stock.id, titleController.text, memberController.text, detailController.text);
     } else {
-      dao.create(titleController.text, memberController.text);
+      dao.create(titleController.text, memberController.text, detailController.text);
     }
   }
 
