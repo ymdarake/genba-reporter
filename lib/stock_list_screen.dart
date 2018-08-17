@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'model/stock_dao.dart';
+import 'bloc/search_bloc.dart';
+import 'api/search_api.dart';
 import 'model/stock.dart';
 
 class StockListScreen extends StatefulWidget {
@@ -9,7 +9,7 @@ class StockListScreen extends StatefulWidget {
 }
 
 class StockListState extends State<StockListScreen> {
-  final businessLogic = SearchBusinessLogic();
+  final businessLogic = new SearchBLoC(new SimpleSearchApi());
   final searchController = TextEditingController();
 
   @override
@@ -21,6 +21,7 @@ class StockListState extends State<StockListScreen> {
   @override
   void dispose() {
     searchController.dispose();
+    businessLogic.dispose();
     super.dispose();
   }
 
@@ -35,33 +36,18 @@ class StockListState extends State<StockListScreen> {
         children: [
           new TextField(
             controller: searchController,
-            onChanged: (input) async {
-              await businessLogic.performSearch(input);
-              setState(() {});
-            },
+            onChanged: businessLogic.query.add,
           ),
-          new Column(
-              children: businessLogic.results.map(SearchResult.from).toList()),
+          new StreamBuilder(
+            stream: businessLogic.results,
+            builder: (context, snapshot) => new Column(
+                children: (snapshot.data as List<Stock> ?? [])
+                    .map(SearchResult.from)
+                    .toList()),
+          ),
         ],
       ),
     );
-  }
-}
-
-class SearchBusinessLogic {
-  final SearchApi api = SearchApi();
-  List<Stock> results = [];
-
-  Future<Null> performSearch(String query) async {
-    results = await api.search(query);
-  }
-}
-
-class SearchApi {
-  final StockDao dao = new StockDao();
-
-  Future<List<Stock>> search(String title) async {
-    return dao.find(title);
   }
 }
 
