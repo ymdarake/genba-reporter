@@ -7,7 +7,7 @@ abstract class SearchApi {
 }
 
 class SimpleSearchApi extends SearchApi {
-  final InMemoryStockDao dao = new InMemoryStockDao();
+  final SqfliteStockDao dao = new SqfliteStockDao();
 
   Future<List<Stock>> search(String title) async {
     return dao.find(title);

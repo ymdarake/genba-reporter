@@ -1,5 +1,5 @@
 class Stock {
-  String id;
+  int id;
   String title;
   String member;
   String detail;
@@ -13,9 +13,11 @@ class Stock {
         'detail': detail,
       };
 
-  Stock.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        title = json['title'],
-        member = json['member'],
-        detail = json['detail'];
+  Stock.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    member = json['member'];
+    detail = json['detail'];
+  }
+
 }

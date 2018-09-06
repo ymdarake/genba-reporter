@@ -16,7 +16,7 @@ class StockFormState extends State<StockForm> {
   final titleController = TextEditingController();
   final memberController = TextEditingController(); //TODO: objectにする
   final detailController = TextEditingController();
-  final dao = InMemoryStockDao();
+  final dao = SqfliteStockDao();
 
   Stock stock;
   StockFormState(this.stock);
@@ -38,7 +38,7 @@ class StockFormState extends State<StockForm> {
   }
 
   _save() {
-    if (this.stock.id.length > 0) {
+    if (this.stock.id > 0) {
       dao.update(this.stock.id, titleController.text, memberController.text, detailController.text);
     } else {
       dao.create(titleController.text, memberController.text, detailController.text);

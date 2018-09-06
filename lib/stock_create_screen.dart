@@ -5,6 +5,6 @@ import 'model/stock.dart';
 class StockCreateScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new StockForm(new Stock('', '', '', ''));
+    return new StockForm(new Stock(0, '', '', ''));
   }
 }

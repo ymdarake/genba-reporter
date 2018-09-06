@@ -4,6 +4,7 @@ import 'stock_create_screen.dart';
 import 'bloc/search_bloc.dart';
 import 'api/search_api.dart';
 import 'model/stock.dart';
+import 'model/stock_dao.dart';
 
 class StockListScreen extends StatefulWidget {
   @override
@@ -51,6 +52,17 @@ class StockListState extends State<StockListScreen> {
               decoration: InputDecoration(hintText: 'type to search...'),
               onChanged: businessLogic.query.add,
             ),
+            actions: <Widget>[
+              new IconButton(
+                  icon: new Icon(
+                    Icons.clear_all,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    //TODO:
+                    SqfliteStockDao().reset();
+                  }),
+            ],
             floating: true,
           ),
           new SliverList(
