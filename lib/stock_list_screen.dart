@@ -35,9 +35,6 @@ class StockListState extends State<StockListScreen> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("一覧"),
-      ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
           Navigator.push(context, new MaterialPageRoute(builder: (ctx) {
@@ -46,22 +43,28 @@ class StockListState extends State<StockListScreen> {
         },
         child: new Icon(Icons.add),
       ),
-      body: new Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          new TextField(
-            controller: searchController,
-            decoration: InputDecoration(hintText: 'type to search...'),
-            onChanged: businessLogic.query.add,
+      body: new CustomScrollView(
+        slivers: <Widget>[
+          new SliverAppBar(
+            title: new TextField(
+              controller: searchController,
+              decoration: InputDecoration(hintText: 'type to search...'),
+              onChanged: businessLogic.query.add,
+            ),
+            floating: true,
           ),
-          new StreamBuilder(
-            stream: businessLogic.results,
-            builder: (ctx, snapshot) {
-              return new Column(
-                  children: (snapshot.data as List<Stock> ?? []).map((s) {
-                return SearchResult.from(ctx, s, refreshList);
-              }).toList());
-            },
+          new SliverList(
+            delegate: new SliverChildListDelegate(<Widget>[
+              new StreamBuilder(
+                stream: businessLogic.results,
+                builder: (ctx, snapshot) {
+                  return new Column(
+                      children: (snapshot.data as List<Stock> ?? []).map((s) {
+                    return SearchResult.from(ctx, s, refreshList);
+                  }).toList());
+                },
+              ),
+            ]),
           ),
         ],
       ),
