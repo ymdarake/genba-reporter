@@ -16,7 +16,7 @@ class StockFormState extends State<StockForm> {
   final titleController = TextEditingController();
   final memberController = TextEditingController(); //TODO: objectにする
   final detailController = TextEditingController();
-  final dao = StockDao();
+  final dao = InMemoryStockDao();
 
   Stock stock;
   StockFormState(this.stock);

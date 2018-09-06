@@ -61,3 +61,32 @@ class StockDao {
     return Files().overwrite('8rocket.json', '[]');
   }
 }
+
+class InMemoryStockDao {
+  static List<Stock> list = [];
+
+  Future<Null> create(String title, String member, [String detail = '']) async {
+    list.add(Stock(Hasher().md5(title + member), title, member, detail));
+  }
+
+  Future<Null> update(String id, String title, String member, String detail) async {
+      list = list.map((s) {
+        if (s.id != id) return s;
+        return new Stock(s.id, title, member, detail);
+      }).toList();
+  }
+
+  Future<List<Stock>> all() async {
+    return list;
+  }
+
+  Future<List<Stock>> find(String title) async {
+    return list.where((s) {
+      return s.title.contains(title);
+    }).toList();
+  }
+
+  Future<Null> reset() async {
+    list = [];
+  }
+}
