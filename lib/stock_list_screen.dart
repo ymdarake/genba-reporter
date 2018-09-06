@@ -35,6 +35,7 @@ class StockListState extends State<StockListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    refreshList(null);
     return new Scaffold(
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
@@ -60,7 +61,9 @@ class StockListState extends State<StockListScreen> {
                   ),
                   onPressed: () {
                     //TODO:
-                    SqfliteStockDao().reset();
+                    SqfliteStockDao().reset().then((_){
+                      refreshList(null);
+                    });
                   }),
             ],
             floating: true,
