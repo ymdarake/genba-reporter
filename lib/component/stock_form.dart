@@ -58,16 +58,8 @@ class StockFormState extends State<StockForm> {
               ),
               onPressed: () {
                 _save();
+                Navigator.pop(context);
               }),
-          new IconButton(
-              icon: new Icon(
-                Icons.book,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                //TODO: remove
-                Files().read('8rocket.json').then((t){print(t);});
-              })
         ],
       ),
       body: new Padding(
@@ -92,7 +84,5 @@ class StockFormState extends State<StockForm> {
       ),
     );
   }
-
-
 
 }
