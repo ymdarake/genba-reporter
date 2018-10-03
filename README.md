@@ -1,8 +1,8 @@
 # genba_reporter
 
-A new Flutter application.
+Simple note app written in Flutter.
+You can stock brilliant ideas you come up with for an moment!
 
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+## features
+- write/edit simply
+- search reactively
