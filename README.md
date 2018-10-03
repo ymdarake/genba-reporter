@@ -2,7 +2,7 @@
 
 Simple note app written in Flutter.
 
-You can stock brilliant ideas you come up with for an moment!
+You can stock brilliant ideas you come up with in a moment!
 
 ## Features
 - write/edit simply
